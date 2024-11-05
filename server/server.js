@@ -55,7 +55,6 @@ app.get("/allusers",(req,res)=>{
         ]
     })
 })
-
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 // APP CONFIG START
