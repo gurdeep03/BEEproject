@@ -7,4 +7,5 @@ const { registerDoctor } = require("../controllers/doctorDetailsController"); //
 router.post("/register", registerDoctor);
 router.get("/get", getDoctors);
 
+
 module.exports = router;

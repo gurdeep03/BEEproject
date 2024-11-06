@@ -5,6 +5,7 @@ const getDoctors = asyncHandler(async (req, res) => {
     const doctors = await Doctor.find({});
     res.json(doctors);
 });
+
 const registerDoctor = asyncHandler(async (req, res) => {
     const { name, email, speciality, phoneNumber, experience, address } = req.body;
 
@@ -33,4 +34,4 @@ const registerDoctor = asyncHandler(async (req, res) => {
     res.status(201).json({ message: "Doctor registered successfully", doctor: newDoctor });
 });
 
-module.exports = { registerDoctor };
+module.exports = { registerDoctor , getDoctors };
