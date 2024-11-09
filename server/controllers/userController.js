@@ -2,6 +2,16 @@ const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const User = require("../model/userModel"); // Corrected variable name to 'User'
 require("dotenv").config();
+const jwt = require("jsonwebtoken");
+
+const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: "Error retrieving users" });
+    }
+});
 const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
@@ -53,4 +63,4 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(201).json({ message: "User registered successfully", user: newUser });
 });
 
-module.exports = { registerUser, loginUser };   
+module.exports = { registerUser, loginUser, getAllUsers};   
