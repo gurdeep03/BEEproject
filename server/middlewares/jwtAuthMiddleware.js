@@ -1,21 +1,29 @@
-const jwt=require('jsonwebtoken');  
+const jwt = require('jsonwebtoken');
 
-const generateJwtToken = () => {
-    return jwt.sign(userData, process.env.private_key, { expiresIn: '1h' }); 
-}
+
 
 const validateJwtToken = (req, res, next) => {
-    const token = req.headers.authorization;
-    if (!token) {
-        return res.status(401).json({ message: 'Unauthorized' });
+    const authorization = req.headers.authorization;
+    if (!authorization) {
+        console.log("Authorization header missing"); // Debugging log
+        return res.status(401).json({ err: 'Token not available' });
     }
-    jwt.verify(token, process.env.private_key, (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ message: 'Unauthorized' });
-        }
-        req.user = decoded;
-        next();
-    });    
 
-}
-module.exports = { generateJwtToken, validateJwtToken };
+    const token = authorization.split(' ')[1];
+    if (!token) {
+        console.log("Token not found after splitting header"); // Debugging log
+        return res.status(401).json({ err: 'Unauthorized User' });
+    }
+
+    try {
+        const validateToken = jwt.verify(token, process.env.PRIVATE_KEY);
+        req.user = validateToken;
+        console.log("Token validated successfully:", validateToken); // Debug log
+        next();
+    } catch (err) {
+        console.log("Error validating token:", err.message); // Debugging log
+        return res.status(401).json({ err: 'Invalid or expired token' });
+    } 
+};
+
+module.exports = { validateJwtToken };
