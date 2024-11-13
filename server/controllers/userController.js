@@ -3,6 +3,48 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
 require("dotenv").config();
+const updateUser = asyncHandler(async (req, res) => {
+    const { firstName, lastName, age } = req.body;
+
+    if (!firstName || !lastName || !age) {
+        res.status(400);
+        throw new Error("Please provide first name, last name, and age");
+        }
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+        }
+
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.age = age;
+
+        const updatedUser = await user.save();
+
+        res.status(200).json({
+        message: "User updated successfully",
+        user: updatedUser,
+    });
+});
+        
+
+
+const getUser = asyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        res.status(404);
+        throw new Error("User not found");
+    }
+
+    res.status(200).json({
+        message: "User fetched successfully",
+        user,
+    });
+});
 
 const registerUser = asyncHandler(async (req, res) => {
     const { firstName, lastName, age, gender, bloodGroup, email, phoneNumber, password } = req.body;
@@ -69,4 +111,4 @@ const loginUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUser, loginUser, updateUser, getUser };
