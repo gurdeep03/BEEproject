@@ -1,17 +1,21 @@
 const express = require("express");
-
 const router = express.Router();
-const {
-    registerUser,
-    loginUser,
-    updateUser,
-    getUser
-} = require("../controllers/userController");
+const { validateJwtToken } = require("../middlewares/jwtAuthMiddleware");  // <-- Use require() instead of import
+const { registerUser, loginUser, getAllUsers, getUserProfile, updateUserProfile } = require("../controllers/userController");
 
+// Route to register a new user
 router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.patch("/update", updateUser);
-router.get("/id", getUser);
 
+// Route to login an existing user
+router.post("/login", loginUser);
+
+// Protected route to get all users
+router.get("/getallusers", validateJwtToken, getAllUsers);
+
+// Route to get the user's own profile (protected)
+router.get("/myaccount", validateJwtToken, getUserProfile);
+
+// Route to update the user's profile (protected)
+router.patch("/myaccount", validateJwtToken, updateUserProfile);
 
 module.exports = router;
