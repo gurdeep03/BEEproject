@@ -29,6 +29,7 @@ app.use(errorHandler);
 
 app.use('/api/users', require("./routes/userRoutes"));
 app.use('/api/doctors', require("./routes/doctorRoutes"));
+app.use('/api/newsletters', require("./routes/newsletterRoutes"));
 
 // ERROR handling middleware
 app.use(errorHandler);
